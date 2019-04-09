@@ -1,9 +1,34 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
+import {Query} from 'react-apollo'
+import gql from 'graphql-tag'
 import Card from './Card'
+
+const FEED_QUERY = gql`
+  {
+    query {
+      characters {
+        info {
+          count
+          pages
+          next
+          prev
+        }
+        results {
+          id
+          name
+          status
+          species
+          gender
+          image
+        }
+      }
+    }
+  }
+`
 
 export default class Gallery extends Component {
   render() {
-    const characters = [
+    const mockup = [
       {
         "id": 1,
         "name": "Rick Sanchez",
@@ -55,12 +80,24 @@ export default class Gallery extends Component {
     ]
 
     return (
-      <div className="Gallery">
-        {characters.map(character => <Card
-          key={character.name}
-          character={character}
-        />)}
-      </div>
+      <Query className="Gallery" query={FEED_QUERY}>
+        {({loading, error, data}) =>
+          {
+            if (loading) return <div>Loading</div>
+            if (error) return <div>Error</div>
+
+            const characters = data.characters.results
+            return (
+              <div>
+                {characters.map(character => <Card
+                  key={character.name}
+                  character={character}
+                />)}
+              </div>
+            )
+          }
+        }
+      </Query>
     )
   }
 }
