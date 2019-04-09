@@ -1,19 +1,18 @@
 import React, {Component} from 'react';
 
 export default class Card extends Component {
-
   render() {
     return (
-      <article className="card">
-        <div className="card-image">
-          <img src={this.props.image} alt={this.props.name}/>
+      <article className="Card">
+        <div className="CardImage">
+          <img src={this.props.character.image} alt={this.props.character.name}/>
         </div>
-        <h2 className="card-name">{this.props.name}</h2>
-        <p className="card-status"><span>status</span>{this.props.status}</p>
-        <p className="card-species"><span>species</span>{this.props.species}</p>
-        <p className="card-gender"><span>gender</span>{this.props.gender}</p>
-        <p className="card-origin"><span>origin</span>{this.props.origin}</p>
-        <p className="card-last-location"><span>last location</span>{this.props.lastLocation}</p>
+        <ul>
+          <h2 className="CardName">{this.props.character.name}</h2>
+          <li className="CardStatus">{this.props.character.status}</li>
+          <li className="CardSpecies">{this.props.character.species}</li>
+          <li className="CardGender">{this.props.character.gender}</li>
+        </ul>
       </article>
     );
   }
