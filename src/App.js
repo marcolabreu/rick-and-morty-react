@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import logo from './favicon.svg';
+import React, {Component} from 'react';
+import Card from './components/Card'
 import './App.css';
 
 class App extends Component {
@@ -7,14 +7,18 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Soon, an app to browse through Rick and Morty API.
-          </p>
-          <a className="App-link" href="https://rickandmortyapi.com" target="_blank" rel="noopener noreferrer">
-            Rick and Morty API
-          </a>
+          <h1>Rick and Morty Characters</h1>
         </header>
+        <section>
+              <Card
+                image={'https://rickandmortyapi.com/api/character/avatar/70.jpeg'}
+                name={'Concerto'}
+                status={'Dead'}
+                species={'Humanoid'}
+                gender={'Male'}
+                origin={'unknown'}
+                lastLocation={'unknown'}/>
+        </section>
       </div>
     );
   }

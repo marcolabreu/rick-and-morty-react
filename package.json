@@ -9,6 +9,7 @@
   },
   "scripts": {
     "build": "react-scripts build",
+    "dev": "react-scripts start",
     "eject": "react-scripts eject",
     "now-build": "react-scripts build",
     "start": "react-scripts start",
