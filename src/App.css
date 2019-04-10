@@ -26,10 +26,11 @@
 
 .Card {
   background-color: cornsilk;
-  margin: 1em auto;
+  margin: .6em auto;
   border-radius: 5%;
   overflow: hidden;
   text-align: center;
+  width: 300px;
 }
 
 .Card ul {
@@ -40,13 +41,4 @@
 .Gallery {
   display: flex;
   flex-wrap: wrap;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }

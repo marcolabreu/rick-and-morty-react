@@ -27,7 +27,7 @@ const GET_CHARACTERS = gql`
 export default class Gallery extends Component {
   render() {
     return (
-      <Query className="Gallery" query={GET_CHARACTERS} errorPolicy="all">
+      <Query query={GET_CHARACTERS} errorPolicy="all">
         {({loading, error, data}) =>
           {
             if (loading) return <div>Loading...</div>
@@ -39,7 +39,7 @@ export default class Gallery extends Component {
             const characters = data.characters.results
 
             return (
-              <div>
+              <div className="Gallery">
                 {characters.map(character => <Card
                   key={character.id}
                   character={character}
