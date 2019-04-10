@@ -1,18 +1,19 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import './index.css'
-import App from './App'
-import * as serviceWorker from './serviceWorker'
-import { ApolloProvider } from 'react-apollo'
+// GraphQL Apollo Client imports
 import { ApolloClient } from 'apollo-client'
+import { ApolloProvider } from 'react-apollo'
 import { HttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 
-const RICK_GRAPHQL = 'https://rickandmortyapi.com/graphql/'
+import * as serviceWorker from './serviceWorker'
+import './index.css'
+import App from './App'
+
+const RICK_GRAPHQL = 'https://rickandmortyapi.com/graphql'
 
 const httpLink = new HttpLink({
   uri: RICK_GRAPHQL,
-  headers: {  },
 })
 
 const client = new ApolloClient({

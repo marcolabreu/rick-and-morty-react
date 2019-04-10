@@ -5,7 +5,6 @@ import Card from './Card'
 
 const GET_CHARACTERS = gql`
   {
-    query {
       characters {
         info {
           count
@@ -22,25 +21,27 @@ const GET_CHARACTERS = gql`
           image
         }
       }
-    }
   }
 `
 
 export default class Gallery extends Component {
   render() {
     return (
-      <Query className="Gallery" query={GET_CHARACTERS}>
+      <Query className="Gallery" query={GET_CHARACTERS} errorPolicy="all">
         {({loading, error, data}) =>
           {
-            if (loading) return <div>Loading</div>
-            if (error) return <div>Error</div>
+            if (loading) return <div>Loading...</div>
+            if (error) return <div>Something is wrong... {error.graphQLErrors.map(({ message }, i) => (
+              <p key={i}>{message}</p>
+            ))}</div>
 
+            const info = data.characters.info
             const characters = data.characters.results
 
             return (
               <div>
-                {() => characters.map(character => <Card
-                  key={character.name}
+                {characters.map(character => <Card
+                  key={character.id}
                   character={character}
                 />)}
               </div>
