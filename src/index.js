@@ -1,10 +1,14 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-// GraphQL Apollo Client imports
+
+// GraphQL Apollo imports
 import { ApolloClient } from 'apollo-client'
+import { ApolloLink } from 'apollo-link'
 import { ApolloProvider } from 'react-apollo'
 import { HttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
+import { onError } from 'apollo-link-error'
+
 
 import * as serviceWorker from './serviceWorker'
 import './index.css'
@@ -16,9 +20,21 @@ const httpLink = new HttpLink({
   uri: RICK_GRAPHQL,
 })
 
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors) {
+    // do something with graphql error
+  }
+
+  if (networkError) {
+    // do something with network error
+  }
+})
+
+const link = ApolloLink.from([errorLink, httpLink])
+const cache = new InMemoryCache()
 const client = new ApolloClient({
-  link: httpLink,
-  cache: new InMemoryCache()
+  link,
+  cache
 })
 
 ReactDOM.render(
