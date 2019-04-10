@@ -2,9 +2,6 @@ import React, {Component} from 'react';
 import Gallery from "./components/Gallery";
 import './App.css';
 
-const API = 'https://rickandmortyapi.com/api/';
-const GRAPHQL = 'https://rickandmortyapi.com/graphql/';
-
 export default class App extends Component {
   render() {
     return (

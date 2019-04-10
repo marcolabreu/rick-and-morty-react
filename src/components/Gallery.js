@@ -87,9 +87,10 @@ export default class Gallery extends Component {
             if (error) return <div>Error</div>
 
             const characters = data.characters.results
+
             return (
               <div>
-                {characters.map(character => <Card
+                {() => characters.map(character => <Card
                   key={character.name}
                   character={character}
                 />)}

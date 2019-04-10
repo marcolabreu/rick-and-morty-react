@@ -5,10 +5,20 @@ import App from './App'
 import * as serviceWorker from './serviceWorker'
 import {ApolloProvider} from 'react-apollo'
 import {ApolloClient} from 'apollo-client'
+import { HttpLink } from 'apollo-link-http'
 import {InMemoryCache} from 'apollo-cache-inmemory'
 
+const GITHUB_BASE_URL = 'https://api.github.com/graphql'
+const RICK_API = 'https://rickandmortyapi.com/api/';
+const RICK_GRAPHQL = 'https://rickandmortyapi.com/graphql/';
+
+const httpLink = new HttpLink({
+  uri: RICK_GRAPHQL,
+  headers: {  },
+})
+
 const client = new ApolloClient({
-  link: 'https://rickandmortyapi.com/graphql/',
+  link: httpLink,
   cache: new InMemoryCache()
 })
 
