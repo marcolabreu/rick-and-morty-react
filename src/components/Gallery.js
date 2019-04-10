@@ -1,33 +1,21 @@
 import React, {Component} from 'react'
 import {Query} from 'react-apollo'
-import gql from 'graphql-tag'
 import Card from './Card'
-
-const GET_CHARACTERS = gql`
-  {
-    characters(page: 1, filter: { status: "alive", species: "alien" }) {
-      info {
-        count
-        pages
-        next
-        prev
-      }
-      results {
-        id
-        name
-        status
-        species
-        gender
-        image
-      }
-    }
-  }
-`
+import {GET_CHARACTERS} from "./Queries";
 
 export default class Gallery extends Component {
   render() {
     return (
-      <Query query={GET_CHARACTERS} errorPolicy="all">
+      <Query query={GET_CHARACTERS}
+             errorPolicy="all"
+             // variables={{
+             //   page,
+             //   status,
+             //   species,
+             //   gender,
+             //   name,
+             // }}
+      >
         {({loading, error, data}) => {
           if (loading) return <div>Loading...</div>
           if (error) return <div>Something is wrong... {error.graphQLErrors.map(({message}, i) => (
@@ -36,7 +24,6 @@ export default class Gallery extends Component {
 
           const info = data.characters.info
           const characters = data.characters.results
-
 
           return (
             <div className="Gallery">
