@@ -8,19 +8,17 @@ export default class Gallery extends Component {
     return (
       <Query query={GET_CHARACTERS}
              errorPolicy="all"
-             // variables={{
-             //   page,
-             //   status,
-             //   species,
-             //   gender,
-             //   name,
-             // }}
+             variables={{
+               page: null,
+               status: "alive",
+               species: "",
+               gender: "",
+               name: "rick",
+             }}
       >
         {({loading, error, data}) => {
+          if (error) return <div>Something is wrong...</div>
           if (loading) return <div>Loading...</div>
-          if (error) return <div>Something is wrong... {error.graphQLErrors.map(({message}, i) => (
-            <p key={i}>{message}</p>
-          ))}</div>
 
           const info = data.characters.info
           const characters = data.characters.results
@@ -33,8 +31,7 @@ export default class Gallery extends Component {
               />)}
             </div>
           )
-        }
-        }
+        }}
       </Query>
     )
   }
