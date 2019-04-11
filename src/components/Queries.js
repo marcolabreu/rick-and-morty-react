@@ -2,11 +2,11 @@ import gql from 'graphql-tag'
 
 export const GET_CHARACTERS = gql`
   query Character(
-    $page: Int,
-    $status: String,
-    $species: String,
-    $gender: String,
-    $name: String) 
+    $page: Int = 1,
+    $status: String = "",
+    $species: String = "",
+    $gender: String = "",
+    $name: String = "") 
   {
     characters(page: $page,
       filter: {
