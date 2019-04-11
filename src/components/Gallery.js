@@ -17,7 +17,7 @@ export default class Gallery extends Component {
   render() {
     return (
       <div>
-        git sta <Query query={queryCharacters}
+        <Query query={queryCharacters}
                errorPolicy="all"
                fetchPolicy="cache-and-network"
                variables={{
