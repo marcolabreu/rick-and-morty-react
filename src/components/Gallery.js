@@ -11,17 +11,18 @@ export default class Gallery extends Component {
       species: "",
       gender: "",
       name: ""
-    }
+    },
+    info: {}
   }
 
   render() {
     return (
       <div>
-        <div>
+        <div className={"filters"}>
           {/* TODO: extract search field and filters to components */}
-          {/* TODO: fix blank page bug caused by over-filtering to no results */}
+          {/* FIX: blank page bug caused by over-filtering to no results */}
           <form>
-            <input type="text" placeholder="Filter by name..." onChange={ e => {
+            <input type="text" placeholder="filter by name..." onChange={ e => {
               e.preventDefault()
               this.setState({filter: {...this.state.filter, name: e.target.value}})
             }}/>
@@ -29,7 +30,7 @@ export default class Gallery extends Component {
           <select onChange={e => {
             this.setState({filter: {...this.state.filter, species: e.target.value}})
           }}>
-            <option value="">select status</option>
+            <option value="">filter by species</option>
             <option value="alien">Alien</option>
             <option value="animal">Animal</option>
             <option value="cronenberg">Cronenberg</option>
@@ -43,7 +44,7 @@ export default class Gallery extends Component {
           <select onChange={e => {
             this.setState({filter: {...this.state.filter, gender: e.target.value}})
           }}>
-            <option value="">select genre</option>
+            <option value="">filter by genre</option>
             <option value="female">Female</option>
             <option value="male">Male</option>
             <option value="genderless">Genderless</option>
@@ -52,7 +53,7 @@ export default class Gallery extends Component {
           <select onChange={e => {
             this.setState({filter: {...this.state.filter, status: e.target.value}})
           }}>
-            <option value="">select status</option>
+            <option value="">filter by status</option>
             <option value="alive">Alive</option>
             <option value="dead">Dead</option>
             <option value="unknown">Unknown</option>
@@ -74,14 +75,13 @@ export default class Gallery extends Component {
             if (error) return <div>Something is wrong...</div>
             if (loading) return <div>Loading...</div>
 
-            const info = data.characters.info
-            const characters = data.characters.results
+            this.info = data.characters.info
 
-            /* This if  prevents over-filtering crash, but page is rendered blank */
-            if (characters) return (
+            /* FIX: This if  prevents over-filtering crash, but page is rendered blank */
+            if (data.characters.results) return (
               <div>
                 <div className="Gallery">
-                  {characters.map(character => <Card
+                  {data.characters.results.map(character => <Card
                     character={character}
                   />)}
                 </div>

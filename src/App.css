@@ -43,3 +43,7 @@
   justify-content: space-around;
   flex-wrap: wrap;
 }
+
+.filters form {
+  display: inline-block;
+}
