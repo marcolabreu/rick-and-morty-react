@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {Query} from 'react-apollo'
 import Card from './Card'
-import {GET_CHARACTERS} from "./Queries";
+import {queryCharacters} from "./Queries";
 
 export default class Gallery extends Component {
   state = {
@@ -17,9 +17,9 @@ export default class Gallery extends Component {
   render() {
     return (
       <div>
-        <h2>Awesome Paginator</h2>
-        <Query query={GET_CHARACTERS}
+        git sta <Query query={queryCharacters}
                errorPolicy="all"
+               fetchPolicy="cache-and-network"
                variables={{
                  page: this.state.page,
                  status: this.state.filter.status,
@@ -28,7 +28,7 @@ export default class Gallery extends Component {
                  name: this.state.filter.name,
                }}
         >
-          {({loading, error, data}) => {
+          {({error, loading, data}) => {
             if (error) return <div>Something is wrong...</div>
             if (loading) return <div>Loading...</div>
 
@@ -36,11 +36,13 @@ export default class Gallery extends Component {
             const characters = data.characters.results
 
             return (
-              <div className="Gallery">
-                {characters.map(character => <Card
-                  key={character.name}
-                  character={character}
-                />)}
+              <div>
+                <h2>Awesome Page</h2>
+                <div className="Gallery">
+                  {characters.map(character => <Card
+                    character={character}
+                  />)}
+                </div>
               </div>
             )
           }}

@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-export const GET_CHARACTERS = gql`
+export const queryCharacters = gql`
   query Character(
     $page: Int = 1,
     $status: String = "",
