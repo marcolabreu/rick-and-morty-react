@@ -2,6 +2,7 @@
   text-align: center;
   margin: auto;
   max-width: 60rem;
+  min-width: 400px;
 }
 
 .App-logo {
@@ -44,6 +45,22 @@
   flex-wrap: wrap;
 }
 
-.filters form {
-  display: inline-block;
+.Paginator {
+  display: flex;
+  height: 2rem;
+  margin: .5rem;
+  justify-content: space-evenly;
 }
+
+.Filters {
+  display: flex;
+  margin: .5rem;
+  justify-content: space-evenly;
+}
+
+@media only screen and (max-width: 700px) {
+  .Filters {
+    flex-wrap: wrap;
+  }
+}
+

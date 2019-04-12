@@ -46,7 +46,7 @@ export default class Gallery extends Component {
           >previous page
           </button>
 
-          <h3>page {this.state.query.page ? this.state.query.page : "1"}</h3>
+          <span>page {this.state.query.page ? this.state.query.page : "1"}</span>
 
           <button
             onClick={e => {
