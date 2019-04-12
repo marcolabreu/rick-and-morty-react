@@ -33,6 +33,9 @@ export default class Gallery extends Component {
   render() {
     return (
       <div>
+        {/* TODO: extract pagination and filters to components */}
+        {/* TODO: add reset filters button */}
+        {/* FIX: blank page bug caused by over-filtering to no results */}
         <button
           onClick={e => this.setState({query: {filter: {...this.state.query.filter}, page: this.state.info.prev}})}
         >previous page</button>
@@ -40,9 +43,6 @@ export default class Gallery extends Component {
           onClick={e => this.setState({query: {filter: {...this.state.query.filter}, page: this.state.info.next}})}
         >next page</button>
         <div className={"filters"}>
-          {/* TODO: extract search field and filters to components */}
-          {/* TODO: add reset filters button */}
-          {/* FIX: blank page bug caused by over-filtering to no results */}
           <form>
             <input type="text" placeholder="filter by name..." onChange={e =>
               this.setState({query: {filter: {...this.state.query.filter, name: e.target.value}}})
@@ -106,7 +106,7 @@ export default class Gallery extends Component {
             /* FIX: we use assignment to avoid setState rerender loop
            Is there a better way? */
             this.state.info = data.characters.info
-            console.log(this.state.info.next)
+            console.log(this.state.info.pages)
             console.log(this.state.query.page)
             // this.setState({info: data.characters.info})
             const characters = data.characters.results
@@ -122,8 +122,7 @@ export default class Gallery extends Component {
               this.descendantByKey(characters, 'name');
             }
 
-            /* FIX: This if  prevents over-filtering crash, but page is rendered blank */
-            if (characters) return (
+            if (characters) {return (
               <div>
                 <div className="Gallery">
                   {characters.map(character => <Card
@@ -132,7 +131,8 @@ export default class Gallery extends Component {
                   />)}
                 </div>
               </div>
-            )
+            // Returning renders a blank component
+            )} else return null
           }}
         </Query>
       </div>
