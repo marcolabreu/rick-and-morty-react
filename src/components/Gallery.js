@@ -5,31 +5,49 @@ import {queryCharacters} from "./Queries";
 
 export default class Gallery extends Component {
   state = {
-    page: 1,
-    filter: {
-      status: "",
-      species: "",
-      gender: "",
-      name: ""
-    },
-    info: {}
+    query: {
+      page: 1,
+      info: {},
+      filter: {
+        status: "",
+        species: "",
+        gender: "",
+        name: ""
+      },
+      sort: ""
+    }
   }
+
+  ascendantByKey = (array, key) => array.sort(function (a, b) {
+    var x = a[key];
+    var y = b[key];
+    return ((x < y) ? -1 : ((x > y) ? 1 : 0))
+  });
+  descendantByKey = (array, key) => array.sort(function (a, b) {
+    var x = b[key];
+    var y = a[key];
+    return ((x < y) ? -1 : ((x > y) ? 1 : 0))
+  });
 
   render() {
     return (
       <div>
+        <button>previous page</button>
+        <button
+          // onClick={e => this.setState({query: {page: this.state.query.info.next}})}
+        >next page</button>
         <div className={"filters"}>
           {/* TODO: extract search field and filters to components */}
+          {/* TODO: add reset filters button */}
           {/* FIX: blank page bug caused by over-filtering to no results */}
           <form>
-            <input type="text" placeholder="filter by name..." onChange={ e => {
-              e.preventDefault()
-              this.setState({filter: {...this.state.filter, name: e.target.value}})
-            }}/>
+            <input type="text" placeholder="filter by name..." onChange={e =>
+              this.setState({query: {filter: {...this.state.query.filter, name: e.target.value}}})
+            }/>
           </form>
-          <select onChange={e => {
-            this.setState({filter: {...this.state.filter, species: e.target.value}})
-          }}>
+          <select onChange={e =>
+            this.setState({query: {filter: {...this.state.query.filter, species: e.target.value}}})
+          }>
             <option value="">filter by species</option>
             <option value="alien">Alien</option>
             <option value="animal">Animal</option>
@@ -41,22 +59,29 @@ export default class Gallery extends Component {
             <option value="robot">Robot</option>
             <option value="unknown">Unknown</option>
           </select>
-          <select onChange={e => {
-            this.setState({filter: {...this.state.filter, gender: e.target.value}})
-          }}>
+          <select onChange={e =>
+            this.setState({query: {filter: {...this.state.query.filter, gender: e.target.value}}})
+          }>
             <option value="">filter by genre</option>
             <option value="female">Female</option>
             <option value="male">Male</option>
             <option value="genderless">Genderless</option>
             <option value="unknown">Unknown</option>
           </select>
-          <select onChange={e => {
-            this.setState({filter: {...this.state.filter, status: e.target.value}})
-          }}>
+          <select onChange={e =>
+            this.setState({query: {filter: {...this.state.query.filter, status: e.target.value}}})
+          }>
             <option value="">filter by status</option>
             <option value="alive">Alive</option>
             <option value="dead">Dead</option>
             <option value="unknown">Unknown</option>
+          </select>
+          <select onChange={e =>
+            this.setState({query: {filter: {...this.state.query.filter}, sort: e.target.value}})
+          }>
+            <option value="">sort by name</option>
+            <option value="ascendant">Ascendant</option>
+            <option value="descendant">Descendant</option>
           </select>
         </div>
 
@@ -64,24 +89,38 @@ export default class Gallery extends Component {
                errorPolicy="all"
                fetchPolicy="cache-and-network"
                variables={{
-                 page: this.state.page,
-                 status: this.state.filter.status,
-                 species: this.state.filter.species,
-                 gender: this.state.filter.gender,
-                 name: this.state.filter.name,
+                 page: this.state.query.page,
+                 status: this.state.query.filter.status,
+                 species: this.state.query.filter.species,
+                 gender: this.state.query.filter.gender,
+                 name: this.state.query.filter.name,
                }}
         >
           {({error, loading, data}) => {
             if (error) return <div>Something is wrong...</div>
             if (loading) return <div>Loading...</div>
 
-            this.info = data.characters.info
+            // FIX: state shouldn't be changed directly but setState does not work in here
+            // this.setState({query: {info: data.characters.info}})
+            const characters = data.characters.results
+
+            /* The Rick and Morty GraphQL server documentation do not mention
+            server sorting so we do it client side */
+            if (this.state.query.sort === "ascendant") {
+              this.ascendantByKey(characters, 'name');
+            }
+            /* FIX: Since sorting is only working on client side,
+            we need to ask pages in reverse order when descendant*/
+            if (this.state.query.sort === "descendant") {
+              this.descendantByKey(characters, 'name');
+            }
 
             /* FIX: This if  prevents over-filtering crash, but page is rendered blank */
-            if (data.characters.results) return (
+            if (characters) return (
               <div>
                 <div className="Gallery">
-                  {data.characters.results.map(character => <Card
+                  {characters.map(character => <Card
+                    key={character.id}
                     character={character}
                   />)}
                 </div>
