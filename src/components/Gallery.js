@@ -18,12 +18,12 @@ export default class Gallery extends Component {
     sorting: ""
   }
 
+  // TODO: refactor both sort functions to one
   ascendantByKey = (array, key) => array.sort(function (a, b) {
     var x = a[key];
     var y = b[key];
     return ((x < y) ? -1 : ((x > y) ? 1 : 0))
   })
-  // TODO: refactor both functions to one
   descendantByKey = (array, key) => array.sort(function (a, b) {
     var x = b[key];
     var y = a[key];
@@ -33,16 +33,31 @@ export default class Gallery extends Component {
   render() {
     return (
       <div>
-        {/* TODO: extract pagination and filters to components */}
-        {/* TODO: add reset filters button */}
-        {/* FIX: blank page bug caused by over-filtering to no results */}
-        <button
-          onClick={e => this.setState({query: {filter: {...this.state.query.filter}, page: this.state.info.prev}})}
-        >previous page</button>
-        <button
-          onClick={e => this.setState({query: {filter: {...this.state.query.filter}, page: this.state.info.next}})}
-        >next page</button>
-        <div className={"filters"}>
+        <div className={"Paginator"}>
+          {/* TODO: extract pagination and filters to components */}
+          {/* TODO: add reset filters button */}
+          <button
+            onClick={e => {
+              if (this.state.info.pages === 1) return null
+              this.state.info.prev
+                ? this.setState({query: {filter: {...this.state.query.filter}, page: this.state.info.prev}})
+                : this.setState({query: {filter: {...this.state.query.filter}, page: this.state.info.pages}})
+            }}
+          >previous page
+          </button>
+
+          <h3>page {this.state.query.page ? this.state.query.page : "1"}</h3>
+
+          <button
+            onClick={e => {
+              if (this.state.info.pages === 1) return null
+              this.setState({query: {filter: {...this.state.query.filter}, page: this.state.info.next}})
+            }}
+          >next page</button>
+        </div>
+
+
+        <div className={"Filters"}>
           <form>
             <input type="text" placeholder="filter by name..." onChange={e =>
               this.setState({query: {filter: {...this.state.query.filter, name: e.target.value}}})
@@ -103,7 +118,7 @@ export default class Gallery extends Component {
             if (error) return <div>Something is wrong...</div>
             if (loading) return <div>Loading...</div>
 
-            /* FIX: we use assignment to avoid setState rerender loop
+            /* TODO: FIX: we use assignment to avoid setState rerender loop
            Is there a better way? */
             this.state.info = data.characters.info
             console.log(this.state.info.pages)
@@ -116,8 +131,8 @@ export default class Gallery extends Component {
             if (this.state.sorting === "ascendant") {
               this.ascendantByKey(characters, 'name');
             }
-            /* FIX: Since sorting is only working on client side,
-            we need to ask pages in reverse order when descendant*/
+            /* TODO: FIX: API either doesn't support or didn't document it
+                we only have client side sorting and we need to ask for the last page first*/
             if (this.state.sorting === "descendant") {
               this.descendantByKey(characters, 'name');
             }
@@ -131,7 +146,7 @@ export default class Gallery extends Component {
                   />)}
                 </div>
               </div>
-            // Returning renders a blank component
+            // Returning null is required to render a blank component
             )} else return null
           }}
         </Query>
