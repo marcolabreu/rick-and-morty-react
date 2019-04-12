@@ -22,6 +22,7 @@ export const queryCharacters = gql`
         prev
       }
       results {
+        id
         name
         status
         species
