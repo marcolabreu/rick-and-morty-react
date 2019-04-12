@@ -7,34 +7,37 @@ export default class Gallery extends Component {
   state = {
     query: {
       page: 1,
-      info: {},
       filter: {
         status: "",
         species: "",
         gender: "",
         name: ""
       },
-      sort: ""
-    }
+    },
+    info: {},
+    sorting: ""
   }
 
   ascendantByKey = (array, key) => array.sort(function (a, b) {
     var x = a[key];
     var y = b[key];
     return ((x < y) ? -1 : ((x > y) ? 1 : 0))
-  });
+  })
+  // TODO: refactor both functions to one
   descendantByKey = (array, key) => array.sort(function (a, b) {
     var x = b[key];
     var y = a[key];
     return ((x < y) ? -1 : ((x > y) ? 1 : 0))
-  });
+  })
 
   render() {
     return (
       <div>
-        <button>previous page</button>
         <button
-          // onClick={e => this.setState({query: {page: this.state.query.info.next}})}
+          onClick={e => this.setState({query: {filter: {...this.state.query.filter}, page: this.state.info.prev}})}
+        >previous page</button>
+        <button
+          onClick={e => this.setState({query: {filter: {...this.state.query.filter}, page: this.state.info.next}})}
         >next page</button>
         <div className={"filters"}>
           {/* TODO: extract search field and filters to components */}
@@ -77,7 +80,7 @@ export default class Gallery extends Component {
             <option value="unknown">Unknown</option>
           </select>
           <select onChange={e =>
-            this.setState({query: {filter: {...this.state.query.filter}, sort: e.target.value}})
+            this.setState({ sorting: e.target.value})
           }>
             <option value="">sort by name</option>
             <option value="ascendant">Ascendant</option>
@@ -100,18 +103,22 @@ export default class Gallery extends Component {
             if (error) return <div>Something is wrong...</div>
             if (loading) return <div>Loading...</div>
 
-            // FIX: state shouldn't be changed directly but setState does not work in here
-            // this.setState({query: {info: data.characters.info}})
+            /* FIX: we use assignment to avoid setState rerender loop
+           Is there a better way? */
+            this.state.info = data.characters.info
+            console.log(this.state.info.next)
+            console.log(this.state.query.page)
+            // this.setState({info: data.characters.info})
             const characters = data.characters.results
 
             /* The Rick and Morty GraphQL server documentation do not mention
             server sorting so we do it client side */
-            if (this.state.query.sort === "ascendant") {
+            if (this.state.sorting === "ascendant") {
               this.ascendantByKey(characters, 'name');
             }
             /* FIX: Since sorting is only working on client side,
             we need to ask pages in reverse order when descendant*/
-            if (this.state.query.sort === "descendant") {
+            if (this.state.sorting === "descendant") {
               this.descendantByKey(characters, 'name');
             }
 
