@@ -34,7 +34,8 @@ export default class Gallery extends Component {
     return (
       <div>
         <div className={"Paginator"}>
-          {/* TODO: extract pagination and filters to components */}
+          {/* TODO: extract pagination and filters to components
+          it may require Redux */}
           {/* TODO: add reset filters button */}
           <button
             onClick={e => {
@@ -63,9 +64,10 @@ export default class Gallery extends Component {
               this.setState({query: {filter: {...this.state.query.filter, name: e.target.value}}})
             }/>
           </form>
-          <select onChange={e =>
+          <select onChange={e => {
+            e.preventDefault()
             this.setState({query: {filter: {...this.state.query.filter, species: e.target.value}}})
-          }>
+          }}>
             <option value="">filter by species</option>
             <option value="alien">Alien</option>
             <option value="animal">Animal</option>
