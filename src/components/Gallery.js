@@ -60,14 +60,15 @@ export default class Gallery extends Component {
 
         <div className={"Filters"}>
           <form>
-            <input type="text" placeholder="filter by name..." onChange={e =>
+            <input type="text" placeholder="filter by name..." 
+            onSubmit={e => {e.preventDefault()}
+            onChange={e =>
               this.setState({query: {filter: {...this.state.query.filter, name: e.target.value}}})
             }/>
           </form>
-          <select onChange={e => {
-            e.preventDefault()
+          <select onChange={e =>
             this.setState({query: {filter: {...this.state.query.filter, species: e.target.value}}})
-          }}>
+          }>
             <option value="">filter by species</option>
             <option value="alien">Alien</option>
             <option value="animal">Animal</option>
