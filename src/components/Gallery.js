@@ -2,6 +2,8 @@ import React, {Component} from 'react'
 import {Query} from 'react-apollo'
 import Card from './Card'
 import {queryCharacters} from "./Queries";
+import {genre, sort, species, status}from "./DropdownOptions";
+import { Button, Dropdown, Icon, Input } from 'semantic-ui-react'
 
 export default class Gallery extends Component {
   state = {
@@ -29,7 +31,14 @@ export default class Gallery extends Component {
     var y = a[key];
     return ((x < y) ? -1 : ((x > y) ? 1 : 0))
   })
-
+  onChangeDropdown = (e, data) => {
+    e.target.value = data.value
+    this.onChange(data.filter, e)
+  }
+  onChange = (filter, e) => {
+    console.log(filter)
+    this.setState({query: {filter: {...this.state.query.filter, [filter]: e.target.value}}})
+  }
   render() {
     return (
       <div>
@@ -37,31 +46,31 @@ export default class Gallery extends Component {
           {/* TODO: extract pagination and filters to components
           it may require Redux */}
           {/* TODO: add reset filters button */}
-          <button
+          <Button icon
             onClick={e => {
               if (this.state.info.pages === 1) return null
               this.state.info.prev
                 ? this.setState({query: {filter: {...this.state.query.filter}, page: this.state.info.prev}})
                 : this.setState({query: {filter: {...this.state.query.filter}, page: this.state.info.pages}})
             }}
-          >previous page
-          </button>
+          ><Icon name='chevron left' /> previous page
+          </Button>
 
           <span>page {this.state.query.page ? this.state.query.page : "1"}</span>
 
-          <button
+          <Button icon
             onClick={e => {
               if (this.state.info.pages === 1) return null
               this.setState({query: {filter: {...this.state.query.filter}, page: this.state.info.next}})
             }}
-          >next page
-          </button>
+          >next page <Icon name='chevron right' />
+          </Button>
         </div>
 
 
         <div className={"Filters"}>
           <form>
-            <input type="text" placeholder="filter by name..."
+            <Input icon="search" type="text" placeholder="filter by name..."
                    /* onSubmit is not enough to prevent component refresh in modern browsers
                    because they use what's called passive event detection */
                    onKeyDown={e => {
@@ -76,44 +85,34 @@ export default class Gallery extends Component {
                      this.setState({query: {filter: {...this.state.query.filter, name: e.target.value}}})
                    }/>
           </form>
-          <select onChange={e =>
-            this.setState({query: {filter: {...this.state.query.filter, species: e.target.value}}})
-          }>
-            <option value="">filter by species</option>
-            <option value="alien">Alien</option>
-            <option value="animal">Animal</option>
-            <option value="cronenberg">Cronenberg</option>
-            <option value="disease">Disease</option>
-            <option value="human">Human</option>
-            <option value="humanoid">Humanoid</option>
-            <option value="mytholog">Mytholog</option>
-            <option value="robot">Robot</option>
-            <option value="unknown">Unknown</option>
-          </select>
-          <select onChange={e =>
-            this.setState({query: {filter: {...this.state.query.filter, gender: e.target.value}}})
-          }>
-            <option value="">filter by genre</option>
-            <option value="female">Female</option>
-            <option value="male">Male</option>
-            <option value="genderless">Genderless</option>
-            <option value="unknown">Unknown</option>
-          </select>
-          <select onChange={e =>
-            this.setState({query: {filter: {...this.state.query.filter, status: e.target.value}}})
-          }>
-            <option value="">filter by status</option>
-            <option value="alive">Alive</option>
-            <option value="dead">Dead</option>
-            <option value="unknown">Unknown</option>
-          </select>
-          <select onChange={e =>
-            this.setState({sorting: e.target.value})
-          }>
-            <option value="">sort by name</option>
-            <option value="ascendant">Ascendant</option>
-            <option value="descendant">Descendant</option>
-          </select>
+          <Dropdown
+            placeholder="filter by species"
+            selection clearable
+            options={species}
+            onChange={this.onChangeDropdown}
+            filter={`species`}
+          />
+          <Dropdown
+            placeholder="filter by status"
+            selection clearable
+            options={status}
+            onChange={this.onChangeDropdown}
+            filter={`status`}
+          />
+          <Dropdown
+            placeholder="filter by genre"
+            selection clearable
+            options={genre}
+            onChange={this.onChangeDropdown}
+            filter={`gender`}
+          />
+          <Dropdown
+            placeholder="sort by name"
+            selection clearable
+            options={sort}
+            onChange={(e, data) => this.setState({sorting: data.value})
+            }
+          />
         </div>
 
         <Query query={queryCharacters}
@@ -134,8 +133,9 @@ export default class Gallery extends Component {
             /* TODO: FIX: we use assignment to avoid setState rerender loop
            Is there a better way? */
             this.state.info = data.characters.info
-            console.log(this.state.info.pages)
-            console.log(this.state.query.page)
+            console.log(`Total pages: ${this.state.info.pages}`)
+            console.log(`Page in state: ${this.state.query.page}`)
+            console.log(this.state.query.filter)
             // this.setState({info: data.characters.info})
             const characters = data.characters.results
 

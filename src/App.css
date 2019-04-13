@@ -47,7 +47,7 @@
 
 .Paginator {
   display: flex;
-  height: 2rem;
+  /*height: 2rem;*/
   margin: .5rem;
   justify-content: space-evenly;
 }
@@ -55,10 +55,10 @@
 .Filters {
   display: flex;
   margin: .5rem;
-  justify-content: space-evenly;
+  justify-content: center;
 }
 
-@media only screen and (max-width: 700px) {
+@media only screen and (max-width: 1000px) {
   .Filters {
     flex-wrap: wrap;
   }
