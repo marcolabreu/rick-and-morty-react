@@ -54,17 +54,27 @@ export default class Gallery extends Component {
               if (this.state.info.pages === 1) return null
               this.setState({query: {filter: {...this.state.query.filter}, page: this.state.info.next}})
             }}
-          >next page</button>
+          >next page
+          </button>
         </div>
 
 
         <div className={"Filters"}>
           <form>
-            <input type="text" placeholder="filter by name..." 
-            onSubmit={e => (e.stopPropagation(), e.nativeEvent.stopImmediatePropagation())}
-            onChange={e =>
-              this.setState({query: {filter: {...this.state.query.filter, name: e.target.value}}})
-            }/>
+            <input type="text" placeholder="filter by name..."
+                   /* onSubmit is not enough to prevent component refresh in modern browsers
+                   because they use what's called passive event detection */
+                   onKeyDown={e => {
+                     if (e.keyCode === 13) {
+                       e.preventDefault()
+                     }
+                   }}
+                   onSubmit={e => {
+                     e.preventDefault()
+                   }}
+                   onChange={e =>
+                     this.setState({query: {filter: {...this.state.query.filter, name: e.target.value}}})
+                   }/>
           </form>
           <select onChange={e =>
             this.setState({query: {filter: {...this.state.query.filter, species: e.target.value}}})
@@ -98,7 +108,7 @@ export default class Gallery extends Component {
             <option value="unknown">Unknown</option>
           </select>
           <select onChange={e =>
-            this.setState({ sorting: e.target.value})
+            this.setState({sorting: e.target.value})
           }>
             <option value="">sort by name</option>
             <option value="ascendant">Ascendant</option>
@@ -140,17 +150,19 @@ export default class Gallery extends Component {
               this.descendantByKey(characters, 'name');
             }
 
-            if (characters) {return (
-              <div>
-                <div className="Gallery">
-                  {characters.map(character => <Card
-                    key={character.id}
-                    character={character}
-                  />)}
+            if (characters) {
+              return (
+                <div>
+                  <div className="Gallery">
+                    {characters.map(character => <Card
+                      key={character.id}
+                      character={character}
+                    />)}
+                  </div>
                 </div>
-              </div>
-            // Returning null is required to render a blank component
-            )} else return null
+                // Returning null is required to render a blank component
+              )
+            } else return null
           }}
         </Query>
       </div>
