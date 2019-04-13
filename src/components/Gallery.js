@@ -61,7 +61,7 @@ export default class Gallery extends Component {
         <div className={"Filters"}>
           <form>
             <input type="text" placeholder="filter by name..." 
-            onSubmit={e => e.preventDefault()}
+            onSubmit={e => (e.stopPropagation(), e.nativeEvent.stopImmediatePropagation())}
             onChange={e =>
               this.setState({query: {filter: {...this.state.query.filter, name: e.target.value}}})
             }/>
