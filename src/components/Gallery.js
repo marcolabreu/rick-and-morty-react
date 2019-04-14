@@ -31,21 +31,23 @@ export default class Gallery extends Component {
     var y = a[key];
     return ((x < y) ? -1 : ((x > y) ? 1 : 0))
   })
+  
+  /* Dropdown components pass event, then data, while React 
+  accepts any number of optional paramaters before the event*/
   onChangeDropdown = (e, data) => {
     e.target.value = data.value
     this.onChange(data.filter, e)
   }
   onChange = (filter, e) => {
-    console.log(filter)
     this.setState({query: {filter: {...this.state.query.filter, [filter]: e.target.value}}})
   }
+  
   render() {
     return (
       <div>
         <div className={"Paginator"}>
           {/* TODO: extract pagination and filters to components
-          it may require Redux */}
-          {/* TODO: add reset filters button */}
+          maybe using Redux */}
           <Button icon
             onClick={e => {
               if (this.state.info.pages === 1) return null
@@ -55,7 +57,8 @@ export default class Gallery extends Component {
             }}
           ><Icon name='chevron left' /> previous page
           </Button>
-
+          
+          // TODO: replace with a better styled page counter
           <span>page {this.state.query.page ? this.state.query.page : "1"}</span>
 
           <Button icon
@@ -71,8 +74,8 @@ export default class Gallery extends Component {
         <div className={"Filters"}>
           <form>
             <Input icon="search" type="text" placeholder="filter by name..."
-                   /* onSubmit is not enough to prevent component refresh in modern browsers
-                   because they use what's called passive event detection */
+                   /* onSubmit is not enough to prevent component refresh in some modern 
+                   browsers because they use what's called passive event detection */
                    onKeyDown={e => {
                      if (e.keyCode === 13) {
                        e.preventDefault()
@@ -131,12 +134,10 @@ export default class Gallery extends Component {
             if (loading) return <div>Loading...</div>
 
             /* TODO: FIX: we use assignment to avoid setState rerender loop
-           Is there a better way? */
+                     Is there a better way? */
             this.state.info = data.characters.info
-            console.log(`Total pages: ${this.state.info.pages}`)
-            console.log(`Page in state: ${this.state.query.page}`)
-            console.log(this.state.query.filter)
             // this.setState({info: data.characters.info})
+            
             const characters = data.characters.results
 
             /* The Rick and Morty GraphQL server documentation do not mention
@@ -144,6 +145,7 @@ export default class Gallery extends Component {
             if (this.state.sorting === "ascendant") {
               this.ascendantByKey(characters, 'name');
             }
+            
             /* TODO: FIX: API either doesn't support or didn't document it
                 we only have client side sorting and we need to ask for the last page first*/
             if (this.state.sorting === "descendant") {
@@ -160,7 +162,7 @@ export default class Gallery extends Component {
                     />)}
                   </div>
                 </div>
-                // Returning null is required to render a blank component
+                // Returning null is required to render a blank component with Apollo
               )
             } else return null
           }}
