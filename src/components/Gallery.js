@@ -31,8 +31,8 @@ export default class Gallery extends Component {
     var y = a[key];
     return ((x < y) ? -1 : ((x > y) ? 1 : 0))
   })
-  
-  /* Dropdown components pass event, then data, while React 
+
+  /* Dropdown components pass event, then data, while React
   accepts any number of optional paramaters before the event*/
   onChangeDropdown = (e, data) => {
     e.target.value = data.value
@@ -41,7 +41,7 @@ export default class Gallery extends Component {
   onChange = (filter, e) => {
     this.setState({query: {filter: {...this.state.query.filter, [filter]: e.target.value}}})
   }
-  
+
   render() {
     return (
       <div>
@@ -57,8 +57,8 @@ export default class Gallery extends Component {
             }}
           ><Icon name='chevron left' /> previous page
           </Button>
-          
-          // TODO: replace with a better styled page counter
+
+          {/* TODO: replace with a better styled page counter*/}
           <span>page {this.state.query.page ? this.state.query.page : "1"}</span>
 
           <Button icon
@@ -74,7 +74,7 @@ export default class Gallery extends Component {
         <div className={"Filters"}>
           <form>
             <Input icon="search" type="text" placeholder="filter by name..."
-                   /* onSubmit is not enough to prevent component refresh in some modern 
+                   /* onSubmit is not enough to prevent component refresh in some modern
                    browsers because they use what's called passive event detection */
                    onKeyDown={e => {
                      if (e.keyCode === 13) {
@@ -137,7 +137,7 @@ export default class Gallery extends Component {
                      Is there a better way? */
             this.state.info = data.characters.info
             // this.setState({info: data.characters.info})
-            
+
             const characters = data.characters.results
 
             /* The Rick and Morty GraphQL server documentation do not mention
@@ -145,7 +145,7 @@ export default class Gallery extends Component {
             if (this.state.sorting === "ascendant") {
               this.ascendantByKey(characters, 'name');
             }
-            
+
             /* TODO: FIX: API either doesn't support or didn't document it
                 we only have client side sorting and we need to ask for the last page first*/
             if (this.state.sorting === "descendant") {
