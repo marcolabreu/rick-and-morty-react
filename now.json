@@ -5,6 +5,7 @@
     "rick-reacts.now.sh"
   ],
   "name": "rick-and-morty-react",
+  "regions": ["bru","cdg"],
   "builds": [
     { "src": "package.json", "use": "@now/static-build", "config": { "distDir": "build" } }
   ],
