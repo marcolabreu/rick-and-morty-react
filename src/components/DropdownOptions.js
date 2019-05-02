@@ -1,3 +1,5 @@
+/* TODO: Retrive all informations from the server and create 
+filters that are maintenance free */
 export const genre = [
   { key: 1, text: 'Female', value: 'female' },
   { key: 2, text: 'Male', value: 'male' },
