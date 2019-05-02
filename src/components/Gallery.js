@@ -136,10 +136,10 @@ export default class Gallery extends Component {
                 characters.sort((a, b) => (a.name > b.name) ? -1 : 1);
                 break
               default:
+                // We divide by one to cast id string to integer
                 characters.sort((a, b) => (a.id/1 > b.id/1) ? 1 : -1);
             }
 
-            console.log(characters);
             if (characters) {
 
               return (
