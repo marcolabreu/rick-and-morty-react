@@ -20,18 +20,6 @@ export default class Gallery extends Component {
     sorting: ""
   }
 
-  // TODO: refactor both sort functions to one
-  ascendantByKey = (array, key) => array.sort(function (a, b) {
-    var x = a[key];
-    var y = b[key];
-    return ((x < y) ? -1 : ((x > y) ? 1 : 0))
-  })
-  descendantByKey = (array, key) => array.sort(function (a, b) {
-    var x = b[key];
-    var y = a[key];
-    return ((x < y) ? -1 : ((x > y) ? 1 : 0))
-  })
-
   /* Dropdown components pass event, then data, while React
   accepts any number of optional paramaters before the event*/
   onChangeDropdown = (e, data) => {
@@ -133,26 +121,27 @@ export default class Gallery extends Component {
             if (error) return <div>Something is wrong...</div>
             if (loading) return <div>Loading...</div>
 
-            /* TODO: FIX: we use assignment to avoid setState rerender loop
+            /* TODO: we use assignment to avoid setState rerender loop
                      Is there a better way? */
             this.state.info = data.characters.info
             // this.setState({info: data.characters.info})
 
             const characters = data.characters.results
 
-            /* The Rick and Morty GraphQL server documentation do not mention
-            server sorting so we do it client side */
-            if (this.state.sorting === "ascendant") {
-              this.ascendantByKey(characters, 'name');
+            switch (this.state.sorting) {
+              case "ascendant":
+                characters.sort((a, b) => (a.name > b.name) ? 1 : -1);
+                break
+              case "descendant":
+                characters.sort((a, b) => (a.name > b.name) ? -1 : 1);
+                break
+              default:
+                characters.sort((a, b) => (a.id/1 > b.id/1) ? 1 : -1);
             }
 
-            /* TODO: FIX: API either doesn't support or didn't document it
-                we only have client side sorting and we need to ask for the last page first*/
-            if (this.state.sorting === "descendant") {
-              this.descendantByKey(characters, 'name');
-            }
-
+            console.log(characters);
             if (characters) {
+
               return (
                 <div>
                   <div className="Gallery">
