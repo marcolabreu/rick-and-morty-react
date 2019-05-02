@@ -1,8 +1,8 @@
 {
   "version": 2,
   "alias": [
-    "rick-reacts.now.sh",
-    "rick-and-morty-react.abreu.now.sh"
+    "rick-react.now.sh",
+    "rick-reacts.now.sh"
   ],
   "name": "rick-and-morty-react",
   "builds": [

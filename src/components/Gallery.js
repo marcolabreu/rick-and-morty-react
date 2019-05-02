@@ -2,8 +2,8 @@ import React, {Component} from 'react'
 import {Query} from 'react-apollo'
 import Card from './Card'
 import {queryCharacters} from "./Queries";
-import {genre, sort, species, status}from "./DropdownOptions";
-import { Button, Dropdown, Icon, Input } from 'semantic-ui-react'
+import {genre, sort, species, status} from "./DropdownOptions";
+import {Button, Dropdown, Icon, Input} from 'semantic-ui-react'
 
 export default class Gallery extends Component {
   state = {
@@ -37,24 +37,24 @@ export default class Gallery extends Component {
           {/* TODO: extract pagination and filters to components
           maybe using Redux */}
           <Button icon
-            onClick={e => {
-              if (this.state.info.pages === 1) return null
-              this.state.info.prev
-                ? this.setState({query: {filter: {...this.state.query.filter}, page: this.state.info.prev}})
-                : this.setState({query: {filter: {...this.state.query.filter}, page: this.state.info.pages}})
-            }}
-          ><Icon name='chevron left' /> previous page
+                  onClick={e => {
+                    if (this.state.info.pages === 1) return null
+                    this.state.info.prev
+                      ? this.setState({query: {filter: {...this.state.query.filter}, page: this.state.info.prev}})
+                      : this.setState({query: {filter: {...this.state.query.filter}, page: this.state.info.pages}})
+                  }}
+          ><Icon name='chevron left'/> previous page
           </Button>
 
           {/* TODO: replace with a better styled page counter*/}
           <span>page {this.state.query.page ? this.state.query.page : "1"}</span>
 
           <Button icon
-            onClick={e => {
-              if (this.state.info.pages === 1) return null
-              this.setState({query: {filter: {...this.state.query.filter}, page: this.state.info.next}})
-            }}
-          >next page <Icon name='chevron right' />
+                  onClick={e => {
+                    if (this.state.info.pages === 1) return null
+                    this.setState({query: {filter: {...this.state.query.filter}, page: this.state.info.next}})
+                  }}
+          >next page <Icon name='chevron right'/>
           </Button>
         </div>
 
@@ -62,8 +62,8 @@ export default class Gallery extends Component {
         <div className={"Filters"}>
           <form>
             <Input icon="search" type="text" placeholder="filter by name..."
-                   /* onSubmit is not enough to prevent component refresh in some modern
-                   browsers because they use what's called passive event detection */
+              /* onSubmit is not enough to prevent component refresh in some modern
+              browsers because they use what's called passive event detection */
                    onKeyDown={e => {
                      if (e.keyCode === 13) {
                        e.preventDefault()
@@ -137,11 +137,10 @@ export default class Gallery extends Component {
                 break
               default:
                 // We divide by one to cast id string to integer
-                characters.sort((a, b) => (a.id/1 > b.id/1) ? 1 : -1);
+                characters.sort((a, b) => (a.id / 1 > b.id / 1) ? 1 : -1);
             }
 
             if (characters) {
-
               return (
                 <div>
                   <div className="Gallery">
@@ -151,8 +150,8 @@ export default class Gallery extends Component {
                     />)}
                   </div>
                 </div>
-                // Returning null is required to render a blank component with Apollo
               )
+              // Returning null is required to render a blank component with Apollo
             } else return null
           }}
         </Query>
