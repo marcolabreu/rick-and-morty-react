@@ -128,19 +128,18 @@ export default class Gallery extends Component {
 
             const characters = data.characters.results
 
-            switch (this.state.sorting) {
-              case "ascendant":
-                characters.sort((a, b) => (a.name > b.name) ? 1 : -1);
-                break
-              case "descendant":
-                characters.sort((a, b) => (a.name > b.name) ? -1 : 1);
-                break
-              default:
-                // We divide by one to cast id string to integer
-                characters.sort((a, b) => (a.id / 1 > b.id / 1) ? 1 : -1);
-            }
-
             if (characters) {
+              switch (this.state.sorting) {
+                case "ascendant":
+                  characters.sort((a, b) => (a.name > b.name));
+                  break
+                case "descendant":
+                  characters.sort((a, b) => (a.name < b.name));
+                  break
+                default:
+                  characters.sort((a, b) => (parseInt(a.id) > b.id));
+              }
+
               return (
                 <div>
                   <div className="Gallery">
