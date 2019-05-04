@@ -21,7 +21,7 @@ export default class Gallery extends Component {
   }
 
   /* Dropdown components pass event, then data, while React
-  accepts any number of optional paramaters before the event*/
+  accepts any number of optional parameters before the event*/
   onChangeDropdown = (e, data) => {
     e.target.value = data.value
     this.onChange(data.filter, e)
